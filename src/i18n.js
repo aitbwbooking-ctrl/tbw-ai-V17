@@ -1,193 +1,220 @@
-// src/i18n.js
-
-export const LANGS = {
-  hr: "HR",
-  en: "EN",
-  de: "DE",
-  it: "IT",
-  sl: "SL",
+// Svi jezici koje smo dogovorili
+export const LANGUAGES = {
+  hr: "Hrvatski",
+  en: "English",
+  de: "Deutsch",
+  it: "Italiano",
+  fr: "Français",
+  es: "Español",
+  hu: "Magyar",
+  pl: "Polski",
+  nl: "Nederlands",
+  sq: "Shqip",
+  ar: "العربية",
+  uk: "Українська",
+  cs: "Čeština",
+  sl: "Slovenščina",
+  tr: "Türkçe",
+  ne: "नेपाली",
+  hi: "हिन्दी",
+  bg: "Български",
+  ro: "Română",
+  ko: "한국어",
+  zh: "中文",
+  ja: "日本語",
+  fi: "Suomi",
+  "pt-BR": "Português BR"
 };
 
-export const DEFAULT_LANG = "hr";
-
-const translations = {
-  hr: {
-    appTitle: "TBW AI PREMIUM",
-    appSubtitle: "Navigator",
-    mainPlaceholder: "Reci npr: \"Hej TBW, nađi mi apartmane u Splitu za vikend\"...",
-    mainButton: "Traži",
-    voiceHint:
-      "Mikrofon demo: u finalnoj verziji ide pravi 'speech-to-text' (Web Speech API / mobilni SDK).",
-    cityZagreb: "Zagreb",
-    citySplit: "Split",
-    cityKarlovac: "Karlovac",
-    cityZadar: "Zadar",
-
-    trial: "Trial",
-    demo: "Demo",
-    premium: "Premium",
-
-    cardNavTitle: "Navigacija",
-    cardNavDesc: "Aktivna ruta, smjer, ETA, truck profil (premium).",
-    cardStayTitle: "Rezervacija smještaja",
-    cardStayDesc: "Brza provjera apartmana i hotela.",
-    cardWeatherTitle: "Vrijeme",
-    cardWeatherDesc: "Trenutna prognoza i more.",
-    cardTrafficTitle: "Promet uživo",
-    cardTrafficDesc: "Gužve, radovi, kamere.",
-    cardAirTitle: "Aerodromi",
-    cardAirDesc: "Dolazni i odlazni letovi.",
-    cardEventsTitle: "Eventi",
-    cardEventsDesc: "Koncerti, festivali, događanja.",
-    cardShopsTitle: "Trgovine & energija",
-    cardShopsDesc: "Trgovine, shopping centri, benzinske / EV.",
-    cardSafetyTitle: "Sigurnost & SOS",
-    cardSafetyDesc: "ICE kontakti, 112 / 192, sigurnosni savjeti.",
-
-    modalClose: "Zatvori",
-    modalNavTitle: "Navigacija – premium suputnik",
-    modalNavBody:
-      "Planirano: full-screen karta, live promet, glasovne upute, upozorenja na radove i radare, truck profil, offline rute i još mnogo toga.",
-
-    modalStayTitle: "Rezervacija smještaja",
-    modalStayBody:
-      "U premium modu ovdje se spajaš na Booking, Airbnb i druge partnere uz TBW filtere (cijena, ocjene, lokacija).",
-
-    modalTrafficTitle: "Promet uživo",
-    modalTrafficBody:
-      "Live pregled gužvi, radova, kamera i zatvaranja cesta uz TBW upozorenja za tvoj profil vožnje.",
-
-    modalWeatherTitle: "Vrijeme i more",
-    modalWeatherBody:
-      "Povezivanje na DHMZ, meteo i morske API-je s TBW komentarom (oprez vjetar, nevera, magla...).",
-
-    modalAirTitle: "Aerodromi",
-    modalAirBody:
-      "Boarding, kašnjenja, gate, prognoza vremena i TBW savjeti za putnike.",
-
-    modalEventsTitle: "Eventi i Nightlife",
-    modalEventsBody:
-      "Koncerti, festivali, kino, klubovi – personalizirani prijedlozi prema tvojim preferencama.",
-
-    modalShopsTitle: "Trgovine & energija",
-    modalShopsBody:
-      "Shopping centri, trgovine, radno vrijeme, benzinske i EV punionice uz TBW filtere.",
-
-    modalSafetyTitle: "Sigurnost & SOS",
-    modalSafetyBody:
-      "ICE kontakti, lokalni brojevi hitnih službi i TBW sigurnosni podsjetnik za cestu i putovanje.",
-
-    navFrom: "Polazak",
-    navTo: "Odredište",
-    navStart: "Kreni",
-    navProfile: "Profil",
-    navProfileCar: "Osobni",
-    navProfileTruck: "Kamion",
-    navProfileMoto: "Motor",
-
-    voiceNavHint:
-      "Reci npr. \"Ruta iz Karlovca do Zadra\" ili \"Odvedi me u Split\".",
-    featurePremiumBadge: "PREMIUM",
-
-    footerDisclaimer:
-      "TBW AI PREMIUM je informativni alat. Za promet, vrijeme, more i sigurnost uvijek provjeri službene izvore (MUP, HAK, DHMZ, kapetanije, zračne luke).",
+// ključ → prijevodi po jeziku
+export const KEYS = {
+  app_title: {
+    hr: "TBW AI PREMIUM NAVIGATOR",
+    en: "TBW AI PREMIUM NAVIGATOR"
+  },
+  header_subtitle: {
+    hr: "Prometna upozorenja · Vrijeme · Stanje mora · Nesreće · Alert!",
+    en: "Traffic alerts · Weather · Sea state · Incidents · Alerts!",
+    de: "Verkehr · Wetter · Seegang · Vorfälle · Alarme!",
+    it: "Traffico · Meteo · Mare · Incidenti · Allerte!",
+    es: "Tráfico · Tiempo · Estado del mar · Incidentes · Alertas!",
+    fr: "Trafic · Météo · État de mer · Incidents · Alertes!",
+    hu: "Forgalom · Időjárás · Tenger · Események · Riasztások!",
+    pl: "Ruch · Pogoda · Morze · Zdarzenia · Alerty!",
+    nl: "Verkeer · Weer · Zee · Incidenten · Alerts!",
+    sl: "Promet · Vreme · Morje · Nesreče · Opozorila!"
+  },
+  search_placeholder: {
+    hr: "Reci ili upiši: Split apartmani za vikend...",
+    en: "Say or type: Split apartments for the weekend...",
+    de: "Sag oder tippe: Apartments in Split fürs Wochenende...",
+    it: "Di' o scrivi: appartamenti a Spalato per il weekend...",
+    es: "Di o escribe: apartamentos en Split para el fin de semana...",
+    fr: "Dis ou écris : appartements à Split pour le week-end...",
+    hu: "Mondd vagy írd: szállás Splitben hétvégére...",
+    sl: "Reci ali vpiši: apartmaji v Splitu za vikend..."
   },
 
-  en: {
-    appTitle: "TBW AI PREMIUM",
-    appSubtitle: "Navigator",
-    mainPlaceholder:
-      'Say e.g. "Hey TBW, find me apartments in Split for the weekend"...',
-    mainButton: "Search",
-    voiceHint:
-      "Mic demo: in the final version this will use full speech-to-text (Web Speech API / mobile SDK).",
-    cityZagreb: "Zagreb",
-    citySplit: "Split",
-    cityKarlovac: "Karlovac",
-    cityZadar: "Zadar",
-
-    trial: "Trial",
-    demo: "Demo",
-    premium: "Premium",
-
-    cardNavTitle: "Navigation",
-    cardNavDesc: "Active route, direction, ETA, truck profile (premium).",
-    cardStayTitle: "Stay booking",
-    cardStayDesc: "Quick check of apartments and hotels.",
-    cardWeatherTitle: "Weather",
-    cardWeatherDesc: "Current forecast and sea.",
-    cardTrafficTitle: "Live traffic",
-    cardTrafficDesc: "Jams, roadworks, cameras.",
-    cardAirTitle: "Airports",
-    cardAirDesc: "Arrivals & departures.",
-    cardEventsTitle: "Events",
-    cardEventsDesc: "Concerts, festivals, nightlife.",
-    cardShopsTitle: "Shops & energy",
-    cardShopsDesc: "Shops, malls, fuel / EV.",
-    cardSafetyTitle: "Safety & SOS",
-    cardSafetyDesc: "ICE contacts, 112 / 192, safety tips.",
-
-    modalClose: "Close",
-    modalNavTitle: "Navigation – premium co-driver",
-    modalNavBody:
-      "Planned: full-screen map, live traffic, voice guidance, roadwork & radar alerts, truck profile, offline routes and more.",
-
-    modalStayTitle: "Stay booking",
-    modalStayBody:
-      "In premium mode this connects to Booking, Airbnb and partners with TBW filters (price, rating, location).",
-
-    modalTrafficTitle: "Live traffic",
-    modalTrafficBody:
-      "Live overview of jams, works, cameras and road closures with TBW alerts for your driving profile.",
-
-    modalWeatherTitle: "Weather & sea",
-    modalWeatherBody:
-      "Connects to meteo & marine APIs with TBW commentary (strong wind, storms, fog warnings...).",
-
-    modalAirTitle: "Airports",
-    modalAirBody:
-      "Boarding, delays, gates and weather with TBW advice for passengers.",
-
-    modalEventsTitle: "Events & nightlife",
-    modalEventsBody:
-      "Concerts, festivals, cinema, clubs – personalized suggestions for you.",
-
-    modalShopsTitle: "Shops & energy",
-    modalShopsBody:
-      "Malls, shops, opening hours, fuel and EV chargers with TBW filters.",
-
-    modalSafetyTitle: "Safety & SOS",
-    modalSafetyBody:
-      "ICE contacts, local emergency numbers and TBW safety reminders for travel.",
-
-    navFrom: "From",
-    navTo: "To",
-    navStart: "Start",
-    navProfile: "Profile",
-    navProfileCar: "Car",
-    navProfileTruck: "Truck",
-    navProfileMoto: "Moto",
-
-    voiceNavHint:
-      'Say e.g. "Route from Karlovac to Zadar" or "Take me to Split".',
-    featurePremiumBadge: "PREMIUM",
-
-    footerDisclaimer:
-      "TBW AI PREMIUM is an informational assistant. Always verify traffic, weather and safety with official sources.",
+  nav_title: {
+    hr: "Navigacija",
+    en: "Navigation",
+    de: "Navigation",
+    it: "Navigazione",
+    fr: "Navigation",
+    es: "Navegación",
+    hu: "Navigáció",
+    pl: "Nawigacja",
+    nl: "Navigatie",
+    sq: "Navigimi",
+    ar: "الملاحة",
+    uk: "Навігація",
+    cs: "Navigace",
+    sl: "Navigacija",
+    tr: "Navigasyon",
+    ne: "नेभिगेसन",
+    hi: "नेविगेशन",
+    bg: "Навигация",
+    ro: "Navigație",
+    ko: "내비게이션",
+    zh: "导航",
+    ja: "ナビゲーション",
+    fi: "Navigointi",
+    "pt-BR": "Navegação"
   },
 
-  // Možeš kasnije proširiti ove jezike,
-  // za sada ih držimo istima kao EN da sve radi.
-  de: {},
-  it: {},
-  sl: {},
+  booking_title: {
+    hr: "Smještaj",
+    en: "Accommodation",
+    de: "Unterkunft",
+    it: "Alloggio",
+    fr: "Hébergement",
+    es: "Alojamiento",
+    hu: "Szállás",
+    pl: "Zakwaterowanie",
+    nl: "Accommodatie",
+    sq: "Akomodimi",
+    ar: "الإقامة",
+    uk: "Житло",
+    cs: "Ubytování",
+    sl: "Nastanitev",
+    tr: "Konaklama",
+    ne: "आवास",
+    hi: "आवास",
+    bg: "Настаняване",
+    ro: "Cazare",
+    ko: "숙박",
+    zh: "住宿",
+    ja: "宿泊",
+    fi: "Majoitus",
+    "pt-BR": "Hospedagem"
+  },
+
+  weather_title: {
+    hr: "Vrijeme",
+    en: "Weather",
+    de: "Wetter",
+    it: "Meteo",
+    fr: "Météo",
+    es: "Clima",
+    hu: "Időjárás",
+    pl: "Pogoda",
+    nl: "Weer",
+    sq: "Moti",
+    ar: "الطقس",
+    uk: "Погода",
+    cs: "Počasí",
+    sl: "Vreme",
+    tr: "Hava durumu",
+    ne: "मौसम",
+    hi: "मौसम",
+    bg: "Времето",
+    ro: "Vremea",
+    ko: "날씨",
+    zh: "天气",
+    ja: "天気",
+    fi: "Sää",
+    "pt-BR": "Clima"
+  },
+
+  traffic_title: {
+    hr: "Promet uživo",
+    en: "Live Traffic",
+    de: "Live-Verkehr",
+    it: "Traffico live",
+    es: "Tráfico en vivo",
+    fr: "Trafic en direct",
+    hu: "Élő forgalom",
+    pl: "Ruch drogowy",
+    nl: "Live verkeer",
+    sq: "Trafiku",
+    ar: "حركة المرور",
+    uk: "Трафік",
+    cs: "Doprava",
+    sl: "Promet v živo",
+    tr: "Canlı trafik",
+    ne: "यातायात",
+    hi: "लाइव ट्रैफिक",
+    bg: "Трафик",
+    ro: "Trafic",
+    ko: "실시간 교통",
+    zh: "实时交通",
+    ja: "交通情報",
+    fi: "Liikenne",
+    "pt-BR": "Tráfego ao vivo"
+  },
+
+  events_title: {
+    hr: "Eventi & nightlife",
+    en: "Events & nightlife",
+    de: "Events & Nightlife",
+    it: "Eventi & nightlife",
+    es: "Eventos & nightlife",
+    fr: "Évènements & nightlife",
+    hu: "Események & nightlife",
+    sl: "Dogodki & nightlife"
+  },
+
+  shops_title: {
+    hr: "Trgovine & energija",
+    en: "Shops & energy",
+    de: "Geschäfte & Energie",
+    it: "Negozi & energia",
+    es: "Tiendas & energía",
+    fr: "Magasins & énergie",
+    hu: "Üzletek & energia",
+    sl: "Trgovine & energija"
+  },
+
+  sos_title: {
+    hr: "Sigurnost & SOS",
+    en: "Safety & SOS",
+    de: "Sicherheit & SOS",
+    it: "Sicurezza & SOS",
+    fr: "Sécurité & SOS",
+    es: "Seguridad & SOS",
+    hu: "Biztonság & SOS",
+    pl: "Bezpieczeństwo & SOS",
+    nl: "Veiligheid & SOS",
+    sq: "Siguria & SOS",
+    ar: "الطوارئ",
+    uk: "Безпека & SOS",
+    cs: "Bezpečnost & SOS",
+    sl: "Varnost & SOS",
+    tr: "Güvenlik & SOS",
+    ne: "सुरक्षा & SOS",
+    hi: "सुरक्षा & SOS",
+    bg: "Безопасност & SOS",
+    ro: "Siguranță & SOS",
+    ko: "안전 & SOS",
+    zh: "安全 & SOS",
+    ja: "安全 & SOS",
+    fi: "Turvallisuus & SOS",
+    "pt-BR": "Segurança & SOS"
+  }
 };
 
-// fallback: ako prijevod ne postoji u jeziku, uzmi HR ili ključ
-export function t(lang, key) {
-  const langPack = translations[lang] || translations[DEFAULT_LANG];
-  if (langPack && langPack[key]) return langPack[key];
-
-  const hrPack = translations.hr || {};
-  return hrPack[key] || key;
+export function t(key, lang) {
+  const entry = KEYS[key];
+  if (!entry) return key;
+  return entry[lang] || entry.en || key;
 }
