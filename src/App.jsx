@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import './App.css'
 
-// --- KONFIG: GRADOVI / HERO SLIKE ---
 const CITY_META = {
   split: {
     name: 'Split',
@@ -33,7 +32,7 @@ const CITY_META = {
   }
 }
 
-// --- JEZICI ---
+// jezici + oznake
 const LANGS = [
   { code: 'hr', label: 'HR' },
   { code: 'en', label: 'EN' },
@@ -57,15 +56,15 @@ const LANGS = [
   { code: 'sv', label: 'SV' },
   { code: 'no', label: 'NO' },
   { code: 'pt-BR', label: 'BR' },
-  { code: 'sq', label: 'SQ' },
-  { code: 'ar', label: 'AR' },
-  { code: 'nl', label: 'NL' },
-  { code: 'uk', label: 'UK' },
-  { code: 'fi', label: 'FI' },
-  { code: 'el', label: 'EL' }
+  { code: 'sq', label: 'SQ' }, // albanski
+  { code: 'ar', label: 'AR' }, // arapski
+  { code: 'nl', label: 'NL' }, // nizozemski
+  { code: 'uk', label: 'UK' }, // ukrajinski
+  { code: 'fi', label: 'FI' }, // finski
+  { code: 'el', label: 'EL' } // grčki
 ]
 
-// --- I18N HR / EN (ostali fallback EN) ---
+// osnovni stringovi hr/en – ostali koriste engleski fallback
 const I18N = {
   hr: {
     subtitle: 'Prometna upozorenja · Vrijeme · Stanje mora · Nesreće · Alert!',
@@ -213,9 +212,8 @@ const getCityMeta = (name) => {
 
 const detectRegionEmergencyNumber = () => {
   const lang = (navigator.language || '').toLowerCase()
-  if (lang.includes('-us') || lang.includes('-ca') || lang.includes('-mx')) {
+  if (lang.includes('-us') || lang.includes('-ca') || lang.includes('-mx'))
     return '911'
-  }
   return '112'
 }
 
@@ -230,19 +228,15 @@ const SUPPORT_QUESTIONS = [
 
 const App = () => {
   const [city, setCity] = useState('Split')
-  const [lang, setLang] = useState(
-    typeof window !== 'undefined'
-      ? localStorage.getItem('tbw_lang') || 'hr'
-      : 'hr'
-  )
+  const [lang, setLang] = useState(localStorage.getItem('tbw_lang') || 'hr')
   const [legalAccepted, setLegalAccepted] = useState(
-    typeof window !== 'undefined' && localStorage.getItem('tbw_legal') === '1'
+    localStorage.getItem('tbw_legal') === '1'
   )
   const [legalChk1, setLegalChk1] = useState(false)
   const [legalChk2, setLegalChk2] = useState(false)
 
   const [introSeen, setIntroSeen] = useState(
-    typeof window !== 'undefined' && localStorage.getItem('tbw_intro') === '1'
+    localStorage.getItem('tbw_intro') === '1'
   )
   const [showMiniIntro, setShowMiniIntro] = useState(false)
 
@@ -266,20 +260,19 @@ const App = () => {
   const [supportOpen, setSupportOpen] = useState(false)
   const [supportMessages, setSupportMessages] = useState([])
   const [founderMode, setFounderMode] = useState(
-    typeof window !== 'undefined' && localStorage.getItem('tbw_founder') === '1'
+    localStorage.getItem('tbw_founder') === '1'
   )
   const [maintenance, setMaintenance] = useState(
-    typeof window !== 'undefined' &&
-      localStorage.getItem('tbw_maintenance') === '1'
+    localStorage.getItem('tbw_maintenance') === '1'
   )
   const [blocked, setBlocked] = useState(
-    typeof window !== 'undefined' && localStorage.getItem('tbw_blocked') === '1'
+    localStorage.getItem('tbw_blocked') === '1'
   )
 
   const dict = useMemo(() => getDict(lang), [lang])
   const meta = useMemo(() => getCityMeta(city), [city])
 
-  // ako je uređaj blokiran – samo ekran blokade
+  // ako je uređaj blokiran – pokaži samo ekran blokade
   if (blocked) {
     return (
       <div className="app-root">
@@ -296,14 +289,12 @@ const App = () => {
   // INTRO (video + mini badge)
   useEffect(() => {
     if (!introSeen) {
+      // pustimo intro video 5–6 sekundi
       const timer = setTimeout(() => {
         setIntroSeen(true)
-        if (typeof window !== 'undefined') {
-          localStorage.setItem('tbw_intro', '1')
-        }
+        localStorage.setItem('tbw_intro', '1')
         setShowMiniIntro(true)
-        const t2 = setTimeout(() => setShowMiniIntro(false), 2000)
-        return () => clearTimeout(t2)
+        setTimeout(() => setShowMiniIntro(false), 2000)
       }, 5500)
       return () => clearTimeout(timer)
     } else {
@@ -311,22 +302,20 @@ const App = () => {
       const t = setTimeout(() => setShowMiniIntro(false), 2000)
       return () => clearTimeout(t)
     }
-  }, [introSeen])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   // PLAN / TRIAL LOGIKA
   useEffect(() => {
-    if (typeof window === 'undefined') return
     let storedPlan = localStorage.getItem('tbw_plan') || 'trial'
     let start = localStorage.getItem('tbw_trial_start')
     const now = Date.now()
-
     if (!start) {
-      start = String(now)
-      localStorage.setItem('tbw_trial_start', start)
+      start = now
+      localStorage.setItem('tbw_trial_start', String(start))
+    } else {
+      start = Number(start)
     }
-    const startNum = Number(start)
-    const days = Math.floor((now - startNum) / (1000 * 60 * 60 * 24))
-
+    const days = Math.floor((now - start) / (1000 * 60 * 60 * 24))
     if (storedPlan === 'trial' && days >= TRIAL_DAYS) {
       storedPlan = 'demo'
       localStorage.setItem('tbw_plan', 'demo')
@@ -337,7 +326,6 @@ const App = () => {
   const premiumText = useMemo(() => {
     if (plan === 'premium') return 'Premium · 9.99 €/mj'
     if (plan === 'demo') return 'Demo mode'
-    if (typeof window === 'undefined') return 'Free trial'
     const start = Number(localStorage.getItem('tbw_trial_start') || Date.now())
     const now = Date.now()
     const days = Math.floor((now - start) / (1000 * 60 * 60 * 24))
@@ -367,13 +355,12 @@ const App = () => {
     return () => clearInterval(id)
   }, [meta])
 
-  // JEZIK → localStorage
+  // JEZIK
   useEffect(() => {
-    if (typeof window === 'undefined') return
     localStorage.setItem('tbw_lang', lang)
   }, [lang])
 
-  // VRIJEME – Open-Meteo
+  // VRIJEME – Open-Meteo (free API)
   useEffect(() => {
     if (!legalAccepted) return
     const load = async () => {
@@ -398,16 +385,17 @@ const App = () => {
     load()
   }, [meta, legalAccepted])
 
-  // GEOLOKACIJA
+  // GEOLOKACIJA – pokušaj naći grad
   useEffect(() => {
     if (!legalAccepted) return
-    if (typeof navigator === 'undefined' || !navigator.geolocation) {
+    if (!navigator.geolocation) {
       setGeoStatus('error')
       return
     }
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         const { latitude, longitude } = pos.coords
+        // grubi izbor – najbliži od 4 grada
         let bestKey = 'split'
         let bestDist = Infinity
         Object.entries(CITY_META).forEach(([key, val]) => {
@@ -428,7 +416,6 @@ const App = () => {
 
   // SAFETY / SOS
   useEffect(() => {
-    if (typeof window === 'undefined') return
     const sosRaw = localStorage.getItem('tbw_sos')
     if (sosRaw) {
       try {
@@ -459,9 +446,7 @@ const App = () => {
     'Preporučuje se dodatno osiguranje vozača i putnika kod ovlaštenih osiguravatelja.'
 
   const handleLegalAccept = () => {
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('tbw_legal', '1')
-    }
+    localStorage.setItem('tbw_legal', '1')
     setLegalAccepted(true)
   }
 
@@ -557,7 +542,7 @@ const App = () => {
 
   const handleAiQuery = (raw) => {
     if (!raw || !raw.trim()) return
-    const text = stripWake(raw.trim())
+    let text = stripWake(raw.trim())
     const lower = text.toLowerCase()
 
     if (pendingEmergency) {
@@ -571,7 +556,8 @@ const App = () => {
       }
       if (/^(ne|nije potrebno|stigli su)/.test(lower)) {
         setPendingEmergency(false)
-        setAiResponse('U redu, ne zovem hitne službe. Vozi oprezno.')
+        const msg = 'U redu, ne zovem hitne službe. Vozi oprezno.'
+        setAiResponse(msg)
         return
       }
     }
@@ -582,9 +568,9 @@ const App = () => {
     const intents = detectIntents(lower)
     if (intents.includes('emergency')) {
       setPendingEmergency(true)
-      setAiResponse(
+      const msg =
         'Detektirao sam prijavu nesreće ispred tebe. Želiš li da pozovem hitne službe?'
-      )
+      setAiResponse(msg)
       return
     }
 
@@ -610,9 +596,8 @@ const App = () => {
     handleAiQuery(search)
   }
 
-  // MIC – WebSpeech
+  // MIC – WebSpeech ako postoji
   useEffect(() => {
-    if (typeof window === 'undefined') return
     const SR = window.SpeechRecognition || window.webkitSpeechRecognition
     if (!SR) return
     const recognition = new SR()
@@ -662,7 +647,7 @@ const App = () => {
         recognition.stop()
       } catch {}
     }
-  }, [])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleCall112 = () => {
     window.location.href = 'tel:112'
@@ -697,9 +682,7 @@ const App = () => {
   }
 
   const handlePlanPurchase = (type) => {
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('tbw_plan', 'premium')
-    }
+    localStorage.setItem('tbw_plan', 'premium')
     setPlan('premium')
     setShowPlanModal(false)
     window.alert(
@@ -730,7 +713,6 @@ const App = () => {
 
   const legalOverlay = !legalAccepted
 
-  // statički popisi
   const landmarks =
     meta.name === 'Split'
       ? ['Dioklecijanova palača', 'Riva', 'Marjan', 'Bačvice']
@@ -746,36 +728,32 @@ const App = () => {
       : meta.name === 'Zadar'
       ? ['Foša', 'Pet Bunara', 'Proto']
       : ['Baltazar', 'Agava', 'Didov San']
-
   const cafes =
     meta.name === 'Split'
       ? ['Viva', 'Ovčice']
       : meta.name === 'Zadar'
       ? ['Garden Lounge', 'Kornat bar']
       : ['Cvjetni', 'Dežman']
-
   const clubs =
     meta.name === 'Split'
       ? ['Vanilla', 'Central']
       : meta.name === 'Zadar'
       ? ['Ledana', 'Maraschino']
       : ['Katran', 'Opera']
-
   const shops =
     meta.name === 'Split'
       ? ['Tommy', 'Konzum', 'Ribola']
       : ['Konzum', 'Spar', 'Plodine']
-
   const malls =
     meta.name === 'Split'
       ? ['Mall of Split', 'City Center One']
       : ['Arena Centar', 'Avenue Mall']
-
-  const fuel = meta.name === 'Split' ? ['INA', 'Crodux'] : ['INA', 'Tifon']
+  const fuel =
+    meta.name === 'Split' ? ['INA', 'Crodux'] : ['INA', 'Tifon']
 
   const busLines = [
-    'Bus 5: Centar → Žnjan (za 9 min)',
-    'Bus 17: Lora → Trg (za 22 min)'
+    `Bus 5: Centar → Žnjan (za 9 min)`,
+    `Bus 17: Lora → Trg (za 22 min)`
   ]
   const railLines = [`IC 521: ${meta.name} → Zagreb 14:40 (+3 min)`]
   const ferryLines =
@@ -789,7 +767,7 @@ const App = () => {
     'Provjeri zimske uvjete iznad 900 m n.v.'
   ]
 
-  // SUPPORT CHAT
+  // SUPPORT CHAT – odgovori ograničeni i sigurni
   const supportAsk = (text) => {
     const userMsg = { from: 'user', text }
     let aiText =
@@ -810,7 +788,7 @@ const App = () => {
     setSupportMessages((prev) => [...prev, userMsg, aiMsg])
   }
 
-  // FOUNDER MOD
+  // founder mod – dvostruki klik na logo
   const handleLogoDoubleClick = () => {
     const pin = window.prompt('Founder PIN:', '')
     if (pin === '1974') {
@@ -837,7 +815,7 @@ const App = () => {
     localStorage.setItem('tbw_blocked', '1')
   }
 
-  // ako je maintenance i nisi founder → samo maintenance ekran
+  // ako je maintenance i nisi founder → prikaz maintenance ekrana
   if (maintenance && !founderMode) {
     return (
       <div className="app-root">
@@ -856,6 +834,7 @@ const App = () => {
     backgroundColor: isPremium ? '#22c55e' : isDemo ? '#facc15' : '#22d3ee'
   }
 
+  // INTRO overlay
   const showIntroOverlay = !introSeen
 
   return (
@@ -867,6 +846,7 @@ const App = () => {
             <h1>TBW AI PREMIUM</h1>
             <p>{dict.subtitle}</p>
             <div className="intro-video-wrap">
+              {/* Ovdje tvoj intro.mp4 u /public */}
               <video
                 src="/intro.mp4"
                 autoPlay
@@ -880,9 +860,7 @@ const App = () => {
               style={{ marginTop: 12 }}
               onClick={() => {
                 setIntroSeen(true)
-                if (typeof window !== 'undefined') {
-                  localStorage.setItem('tbw_intro', '1')
-                }
+                localStorage.setItem('tbw_intro', '1')
               }}
             >
               Preskoči
@@ -1043,7 +1021,7 @@ const App = () => {
           </div>
         </header>
 
-        {/* HERO + AI TRAŽILICA */}
+        {/* HERO + AI TRAŽILICA (sticky) */}
         <div className="hero-search-shell">
           <section className="hero-card">
             <div className="hero-top-row">
@@ -1196,10 +1174,7 @@ const App = () => {
                   `${routeInfo.distance} / ${routeInfo.duration} (${routeInfo.profile})`}
               </div>
               <div className="mt">
-                <button
-                  className="btn-secondary small"
-                  onClick={handleStartNavigation}
-                >
+                <button className="btn-secondary small" onClick={handleStartNavigation}>
                   {dict.btnStartNav}
                 </button>
               </div>
@@ -1389,7 +1364,7 @@ const App = () => {
                 <button className="btn-danger" onClick={handleCall112}>
                   112
                 </button>{' '}
-              <button
+                <button
                   className="btn-secondary small"
                   onClick={handleCall911}
                 >
@@ -1558,7 +1533,7 @@ const App = () => {
           </section>
         </main>
 
-        {/* FOOTER */}
+        {/* FOOTER ZAŠTITE */}
         <footer className="footer">
           <p>
             © {new Date().getFullYear()} TBW AI PREMIUM NAVIGATOR · Sva prava
